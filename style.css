@@ -1,0 +1,143 @@
+/* Import Font Modern */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+/* =========================================
+   VARIABEL TEMA TERANG (BOTANICAL LIGHT)
+   ========================================= */
+:root {
+    --bg-main: #f4f7f4;
+    --bg-card: #ffffff;
+    --bg-sidebar: #eaf2eb;
+    --text-primary: #1b2e1e;
+    --text-secondary: #4a634e;
+    --accent-primary: #2e7d32;
+    --accent-hover: #1b5e20;
+    --accent-soft: #e8f5e9;
+    --border-color: #d5e3d7;
+    --shadow-card: 0 8px 24px rgba(27, 46, 30, 0.06);
+    --badge-warning-bg: #fff8e1;
+    --badge-warning-text: #b26a00;
+}
+
+/* =========================================
+   VARIABEL TEMA GELAP (DEEP FOREST DARK)
+   ========================================= */
+body.dark-theme {
+    --bg-main: #0f1712;
+    --bg-card: #18241d;
+    --bg-sidebar: #131d17;
+    --text-primary: #e8f3ea;
+    --text-secondary: #9bb5a0;
+    --accent-primary: #4caf50;
+    --accent-hover: #66bb6a;
+    --accent-soft: rgba(76, 175, 80, 0.15);
+    --border-color: #26382d;
+    --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.35);
+    --badge-warning-bg: rgba(255, 193, 7, 0.15);
+    --badge-warning-text: #ffd54f;
+}
+
+/* =========================================
+   GLOBAL OVERRIDES STREAMLIT
+   ========================================= */
+html, body, [class*="css"], .stApp {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    background-color: var(--bg-main) !important;
+    color: var(--text-primary) !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+[data-testid="stSidebar"] {
+    background-color: var(--bg-sidebar) !important;
+    border-right: 1px solid var(--border-color);
+}
+
+/* Header Banner Utama */
+.hero-banner {
+    background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 60%, #43a047 100%);
+    padding: 2rem 2.2rem;
+    border-radius: 20px;
+    color: #ffffff !important;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 10px 30px rgba(46, 125, 50, 0.25);
+}
+
+.hero-banner h1 {
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 2.1rem;
+    margin: 0 0 0.4rem 0;
+}
+
+.hero-banner p {
+    color: #e8f5e9 !important;
+    font-size: 1rem;
+    margin: 0;
+    opacity: 0.95;
+}
+
+/* Kartu Konten Estetik */
+.leaf-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 1.2rem;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.leaf-card h3, .leaf-card h4 {
+    color: var(--text-primary) !important;
+    margin-top: 0;
+}
+
+.leaf-card p, .leaf-card li {
+    color: var(--text-secondary) !important;
+    line-height: 1.6;
+}
+
+/* Badge Status & Tanaman */
+.plant-badge {
+    display: inline-block;
+    background-color: var(--accent-soft);
+    color: var(--accent-primary);
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.82rem;
+    margin-bottom: 0.6rem;
+    border: 1px solid var(--accent-primary);
+}
+
+.warning-box {
+    background-color: var(--badge-warning-bg);
+    color: var(--badge-warning-text);
+    padding: 1rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--badge-warning-text);
+    font-size: 0.92rem;
+    margin: 1rem 0;
+}
+
+/* Tombol Utama */
+.stButton > button {
+    background-color: var(--accent-primary) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 0.6rem 1.4rem !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+    width: 100%;
+}
+
+.stButton > button:hover {
+    background-color: var(--accent-hover) !important;
+    transform: translateY(-1px);
+}
+
+/* Penyesuaian Input Label di Dark Mode */
+label, .stMarkdown, .stRadio label, .stSelectbox label, .stNumberInput label {
+    color: var(--text-primary) !important;
+}

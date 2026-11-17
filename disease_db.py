@@ -2,20 +2,18 @@
 CLASS_NAMES = [
     "Cabai - Bercak Daun Bakteri (Bacterial Spot)",
     "Cabai - Sehat (Healthy)",
+    "Jagung - Bercak Daun Abu-abu (Gray Leaf Spot)",
     "Jagung - Hawar Daun (Northern Leaf Blight)",
     "Jagung - Karat Daun (Common Rust)",
-    "Jagung - Bercak Daun Abu-abu (Gray Leaf Spot)",
     "Jagung - Sehat (Healthy)",
+    "Padi - Bercak Cokelat (Brown Spot)",
     "Padi - Blas Daun (Leaf Blast)",
     "Padi - Hawar Daun Bakteri (Bacterial Leaf Blight)",
-    "Padi - Bercak Cokelat (Brown Spot)",
-    "Padi - Sehat (Healthy)",
     "Tomat - Bercak Kering (Early Blight)",
     "Tomat - Busuk Daun (Late Blight)",
-    "Tomat - Virus Kuning Keriting (Yellow Leaf Curl Virus)",
-    "Tomat - Sehat (Healthy)"
+    "Tomat - Sehat (Healthy)",
+    "Tomat - Virus Kuning Keriting (Yellow Leaf Curl Virus)"
 ]
-
 DISEASE_INFO = {
     "Cabai - Bercak Daun Bakteri (Bacterial Spot)": {
         "tanaman": "Cabai",

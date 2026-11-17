@@ -152,7 +152,8 @@ def predict_disease(pil_img: Image.Image, crop_filter: str):
 
     filtered_probs = np.zeros_like(preds)
     for idx in filtered_indices:
-        filtered_probs[idx] = preds[idx]
+        if idx < len(preds):
+            filtered_probs[idx] = preds[idx]
 
     # Normalisasi ulang probabilitas setelah difilter
     if filtered_probs.sum() > 0:

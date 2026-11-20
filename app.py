@@ -89,19 +89,19 @@ model = load_cnn_model()
 
 def generate_gradcam_overlay(img_array: np.ndarray, loaded_model, pred_index: int):
     """Menghasilkan heatmap Grad-CAM untuk menyoroti area bercak penyakit."""
+    # Pastikan gambar dasar bertipe uint8 (0-255) agar kompatibel dengan OpenCV & st.image
+    base_uint8 = np.clip(img_array, 0, 255).astype(np.uint8)
+
     if loaded_model is None:
-        # Simulasi visual heatmap berbasis deteksi area kuning/cokelat jika model belum diload
-        hsv = cv2.cvtColor(img_array, cv2.COLOR_RGB2HSV)
-        # Masking warna kuning/cokelat khas bercak penyakit
+        hsv = cv2.cvtColor(base_uint8, cv2.COLOR_RGB2HSV)
         lower_spot = np.array([10, 40, 40])
         upper_spot = np.array([35, 255, 255])
         mask = cv2.inRange(hsv, lower_spot, upper_spot)
         heatmap = cv2.GaussianBlur(mask, (31, 31), 0)
         heatmap_color = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
         heatmap_color = cv2.cvtColor(heatmap_color, cv2.COLOR_BGR2RGB)
-        return cv2.addWeighted(img_array, 0.6, heatmap_color, 0.4, 0)
+        return cv2.addWeighted(base_uint8, 0.6, heatmap_color, 0.4, 0)
 
-    # Jika model H5 asli tersedia, cari layer Conv2D terakhir
     last_conv_layer = None
     for layer in reversed(loaded_model.layers):
         if isinstance(layer, tf.keras.layers.Conv2D):
@@ -109,14 +109,14 @@ def generate_gradcam_overlay(img_array: np.ndarray, loaded_model, pred_index: in
             break
 
     if last_conv_layer is None:
-        return img_array
+        return base_uint8
 
     grad_model = tf.keras.models.Model(
         [loaded_model.inputs],
         [loaded_model.get_layer(last_conv_layer).output, loaded_model.output]
     )
 
-    img_tensor = np.expand_dims(img_array / 255.0, axis=0)
+    img_tensor = np.expand_dims(img_array.astype("float32"), axis=0)
     with tf.GradientTape() as tape:
         conv_outputs, predictions = grad_model(img_tensor)
         loss = predictions[:, pred_index]
@@ -127,11 +127,13 @@ def generate_gradcam_overlay(img_array: np.ndarray, loaded_model, pred_index: in
     heatmap = conv_outputs @ pooled_grads[..., tf.newaxis]
     heatmap = tf.squeeze(heatmap)
     heatmap = tf.maximum(heatmap, 0) / (tf.math.reduce_max(heatmap) + 1e-8)
-    heatmap = cv2.resize(heatmap.numpy(), (img_array.shape[1], img_array.shape[0]))
+    heatmap = cv2.resize(heatmap.numpy(), (base_uint8.shape[1], base_uint8.shape[0]))
     heatmap = np.uint8(255 * heatmap)
     heatmap_color = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
     heatmap_color = cv2.cvtColor(heatmap_color, cv2.COLOR_BGR2RGB)
-    return cv2.addWeighted(img_array, 0.6, heatmap_color, 0.4, 0)
+
+    # <-- TARUH DI BARIS PALING AKHIR FUNGSI INI:
+    return cv2.addWeighted(base_uint8, 0.6, heatmap_color, 0.4, 0)
 
 def predict_disease(pil_img: Image.Image, crop_filter: str):
     img_resized = pil_img.resize((224, 224))
@@ -264,7 +266,7 @@ with tab_scan:
             with img_c1:
                 st.image(uploaded_image.resize((224, 224)), caption="Input Diproses (224x224)", use_container_width=True)
             with img_c2:
-                st.image(gradcam_overlay, caption="Grad-CAM (Fokus Bercak AI)", use_container_width=True)
+                st.image(gradcam_overlay, caption="Grad-CAM (Fokus Bercak AI)", use_container_width=True, clamp=True)
 
             # Top-3 Confidence Score
             st.markdown("#### 📊 Top-3 Kemungkinan Diagnosis")

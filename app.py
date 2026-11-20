@@ -135,10 +135,11 @@ def generate_gradcam_overlay(img_array: np.ndarray, loaded_model, pred_index: in
 
 def predict_disease(pil_img: Image.Image, crop_filter: str):
     img_resized = pil_img.resize((224, 224))
-    img_array = np.array(img_resized)
+    img_array = np.array(img_resized, dtype=np.float32)
 
     if model is not None:
-        preds = model.predict(np.expand_dims(img_array / 255.0, axis=0))[0]
+        # TANPA / 255.0 karena layer Rescaling(1./255) sudah tertanam di dalam model_leafguard.h5
+        preds = model.predict(np.expand_dims(img_array, axis=0))[0]
     else:
         # Mode Demo Otomatis jika file .h5 belum ditaruh di folder
         np.random.seed(int(np.mean(img_array) * 100))
